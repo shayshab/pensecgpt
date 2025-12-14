@@ -1,0 +1,26 @@
+import { Queue } from 'bullmq';
+import redis from '../config/redis';
+
+export const scanQueue = new Queue('scan-queue', {
+  connection: redis,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: {
+      type: 'exponential',
+      delay: 2000,
+    },
+    removeOnComplete: {
+      age: 3600, // Keep completed jobs for 1 hour
+      count: 1000,
+    },
+    removeOnFail: {
+      age: 24 * 3600, // Keep failed jobs for 24 hours
+    },
+  },
+});
+
+
+
+
+
+
